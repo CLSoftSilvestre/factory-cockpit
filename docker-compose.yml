@@ -1,0 +1,33 @@
+version: '2.4'
+services:
+  api:
+    image: 'factorycockpitapi:latest'
+    mem_limit: 128mb
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    networks:
+      - proxy-redirect
+    volumes:
+      - ./api-factorycockpit/database:/usr/src/app/database
+  
+  frontend:
+    image: 'factorycokpit:latest'
+    mem_limit: 512mb
+    expose:
+      - "4200"
+    ports:
+      - "4200:4200"
+    restart: unless-stopped
+    networks:
+      - proxy-redirect
+    depends_on:
+      - api
+
+networks:
+  proxy-redirect:
+    external: true
+    name: proxy-redirect
+    
