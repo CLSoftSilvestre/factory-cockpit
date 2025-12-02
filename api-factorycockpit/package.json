@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cache-express": "^1.0.2",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-oas-generator": "^1.0.48",
+    "morgan": "^1.10.1",
+    "node-fetch": "^3.3.2",
+    "nodemon": "^3.1.10",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-routes-express": "^3.3.3",
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^13.0.0"
+  },
+  "scripts": {
+    "start": "nodemon app.js",
+    "devStart": "nodemon app.js"
+  }
+}

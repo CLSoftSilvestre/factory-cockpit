@@ -1,0 +1,7 @@
+<form class="content">
+    <mat-form-field [style.width.px]=350>
+        <mat-label><mat-icon>language</mat-icon> Link</mat-label>
+        <input matInput type="text" [value]="data().configuration.webview_link" (change)="widgetWebviewLinkChanged($event)">
+    </mat-form-field>   
+</form>
+<p>Refresh data after updating configuration.</p>

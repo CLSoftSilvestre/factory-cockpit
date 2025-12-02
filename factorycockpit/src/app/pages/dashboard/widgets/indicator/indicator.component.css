@@ -1,0 +1,44 @@
+
+.row {
+    font-size: 2rem;
+    display:flex; 
+}
+
+.stat {
+    padding-right: 5px;
+    padding-top: 5px;
+}
+
+.kpi-ok {
+    color: var(--app-kpi-green) !important;
+}
+
+.kpi-warning {
+    color: var(--app-kpi-yellow) !important;
+}
+
+.kpi-danger {
+    color: var(--app-kpi-red) !important;
+}
+
+.text-green {
+    padding-top: 5px;
+    color: var(--sys-inverse-primary);
+}
+
+.text-red {
+    padding-top: 5px;
+    color: var(--sys-on-error);
+}
+
+.stat-subtext {
+    font-size: smaller;
+}
+
+.stat-difference {
+    font-size: small;
+}
+
+mat-icon {
+    padding: 5px;
+}

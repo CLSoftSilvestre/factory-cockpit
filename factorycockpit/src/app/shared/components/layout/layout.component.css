@@ -1,0 +1,22 @@
+.content {
+    padding: 24px;
+}
+
+mat-toolbar {
+    position: relative;
+    z-index: 5;
+    justify-content: space-between;
+    --mat-toolbar-container-background-color: var(--sys-surface-container-low);
+}
+
+mat-sidenav-container {
+    height: calc(100vh - 64px);
+}
+
+mat-sidenav, mat-sidenav-content {
+    transition: all 500ms ease-in-out;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}

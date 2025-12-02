@@ -1,0 +1,31 @@
+<mat-toolbar class="mat-elevation-z3">
+  <button mat-icon-button (click)="collapsed.set(!collapsed())">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <!--span>Factory Cockpit</span-->
+  <span class="toolbar-spacer"></span>
+  <button mat-icon-button (click)="darkMode.set(!darkMode())">
+    @if(darkMode()){
+      <mat-icon>light_mode</mat-icon>
+    } @else {
+      <mat-icon>dark_mode</mat-icon>
+    }
+  </button>
+  @if (appStore.user(); as user) {
+    <button mat-icon-button [mat-menu-trigger-for]="profileMenu">
+      <mat-icon>person</mat-icon>
+    </button>
+    <mat-menu #profileMenu="matMenu">
+      <button mat-menu-item (click)="appStore.logout()"><mat-icon>logout</mat-icon> Logout</button>
+    </mat-menu>
+  }
+
+</mat-toolbar>
+<mat-sidenav-container>
+  <mat-sidenav opened mode="side" [style.width]="sidenavWidth()">
+    <app-custom-sidenav [collapsed]="collapsed()"></app-custom-sidenav>
+  </mat-sidenav>
+  <mat-sidenav-content class="content" [style.margin-left]="sidenavWidth()">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

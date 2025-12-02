@@ -1,0 +1,18 @@
+.content {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+table {
+  width: 100%;
+}
+
+.timeline-line-item {
+
+  > mat-form-field {
+    height: 60px!important;
+    padding: 5px;
+  }
+}

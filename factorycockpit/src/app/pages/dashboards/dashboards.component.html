@@ -1,0 +1,29 @@
+<app-dashboards-header></app-dashboards-header>
+
+<mat-grid-list [cols]="breakpoint" rowHeight="3:2" (window:resize)="onResize($event)">
+    @for (item of dashboardsList; track item.dashboard_id) {
+        <mat-grid-tile>
+
+            <mat-card class="example-card" appearance="outlined" >
+                <mat-card-header>
+                    <div mat-card-avatar class="example-header-image"></div>
+                    <mat-card-title>{{item.title}}</mat-card-title>
+                    <mat-card-subtitle>{{item.created_at}}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-divider></mat-divider>
+                <mat-card-content>
+                    @for (widget of item.data; track widget.id) {
+                        <p>{{widget.label}}</p>
+                    }
+                </mat-card-content>
+                <mat-card-actions align="end">
+                    <button mat-raised-button (click)="navigateToDashboard(item.dashboard_id)"><mat-icon>dashboard</mat-icon>View</button>
+                    <button mat-icon-button class="delete-button" (click)="deleteDashboard(item.dashboard_id)"><mat-icon>delete</mat-icon></button>
+                </mat-card-actions>
+
+            </mat-card>
+
+        </mat-grid-tile>
+    }
+
+</mat-grid-list>

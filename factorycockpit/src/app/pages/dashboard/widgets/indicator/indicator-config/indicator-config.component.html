@@ -1,0 +1,40 @@
+<form class="content">
+    <mat-form-field [style.width.px]=350>
+        <mat-label><mat-icon>money</mat-icon> Units of Measure</mat-label>
+        <input matInput type="text" [value]="data().configuration.units" (change)="widgetValueUnitsChanged($event)">
+    </mat-form-field>
+
+    <mat-form-field [style.width.px]=350>
+        <mat-label><mat-icon>numbers</mat-icon> Decimal point places</mat-label>
+        <input matInput type="number" min="0" max="5" [value]="data().configuration.decimals" (change)="widgetValueDecimalsChanged($event)">
+    </mat-form-field>
+
+    <mat-form-field [style.width.px]=350>
+        <mat-label><mat-icon>timer</mat-icon> Timespan (hours)</mat-label>
+        <input matInput type="number" min="1" max="24" [value]="data().configuration.timespan" (change)="widgetValueTimespanChanged($event)">
+    </mat-form-field>
+
+    <mat-form-field [style.width.px]=350>
+        <mat-label><mat-icon>calculate</mat-icon> Calculation method</mat-label>
+        <mat-select required (selectionChange)="widgetMethodChanged($event)" [value]="data().configuration.chart_aggregation_method">
+            <mat-option value="None">None</mat-option>
+            <mat-option value="Count">Count</mat-option>
+            <mat-option value="Average">Average</mat-option>
+            <mat-option value="Min">Min</mat-option>
+            <mat-option value="Max">Max</mat-option>
+            <mat-option value="Sum">Sum</mat-option>
+            <mat-option value="First">First</mat-option>
+            <mat-option value="Last">Last</mat-option>
+            <mat-option value="StandardDeviation">Standard Deviation</mat-option>
+            <mat-option value="Counter">Counter</mat-option>
+            <mat-option value="PowerToEnergy">Power to Energy</mat-option>
+            <mat-option value="EnergyToPower">Energy to Power</mat-option>
+            <mat-option value="FlowToAmount">Flow to Amount</mat-option>
+            <mat-option value="AmountToFlow">Amount to Flow</mat-option>
+            <mat-option value="TimeWeightedAverage">Time Weighted Average</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <p>Set calculation method to <b>None</b> to show the last value.</p>
+    
+</form>
+

@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>New dashboard</h2>
+
+<mat-dialog-content class="mat-typography">
+    <form class="basic-tab-content">
+        <mat-form-field [style.width.px]=350>
+            <mat-label><mat-icon>badge</mat-icon> Dashboard name</mat-label>
+            <input matInput type="text" [(ngModel)]="dashboardName" [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-icon-button mat-dialog-close (click)="createDashboard()"><mat-icon>save</mat-icon></button>
+  <button mat-icon-button mat-dialog-close><mat-icon>close</mat-icon></button>
+</mat-dialog-actions>
+

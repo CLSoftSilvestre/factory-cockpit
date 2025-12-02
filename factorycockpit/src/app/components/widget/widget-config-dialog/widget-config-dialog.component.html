@@ -1,0 +1,97 @@
+<h2 mat-dialog-title>Widget configuration</h2>
+<mat-dialog-content class="mat-typography">
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" preserveContent>
+        <mat-tab label="Basic">
+            <div class="basic-tab-content">
+                <form class="basic-tab-content">
+                    <mat-form-field [style.width.px]=350>
+                        <mat-label><mat-icon>badge</mat-icon> Widget name</mat-label>
+                        <input matInput type="text" [value]="data().label" (change)="widgetLabelValueChanged($event)">
+                    </mat-form-field>
+
+                    @if(!data().hideAttributes) {
+                        <mat-form-field [style.width.px]=350>
+                            <mat-label><mat-icon>sell</mat-icon> Attribute Id</mat-label>
+                            <input matInput [disabled]="lock()" type="text" [value]="data().configuration?.attribute"  (change)="widgetAttributeChanged($event)">
+                            <button mat-icon-button matSuffix type="button" matTooltip="Unlock field" (click)="lock.set(!lock())"><mat-icon>{{lock()?'lock':'lock_open'}}</mat-icon></button>
+                        </mat-form-field>
+                    }
+                    
+                    <mat-form-field [style.width.px]=350>
+                        <mat-label><mat-icon>format_color_text</mat-icon> Font color</mat-label>
+                        <input matInput type="color" [value]="data().color" (change)="widgetChangeFontColor($event)">
+                        {{data().color}}
+                        <button mat-icon-button matSuffix type="button" (click)="resetFontColor()" matTooltip="Reset to default color"><mat-icon>restart_alt</mat-icon></button>
+                    </mat-form-field>
+
+                    <mat-form-field [style.width.px]=350>
+                        <mat-label><mat-icon>palette</mat-icon> Background color</mat-label>
+                        <input matInput type="color" [value]="data().backgroundColor" (change)="widgetChangeBackgroundColor($event)">
+                        {{data().backgroundColor}}
+                        <button mat-icon-button matSuffix type="button" (click)="resetBackgroundColor()" matTooltip="Reset to default color"><mat-icon>restart_alt</mat-icon></button>
+                    </mat-form-field>
+                </form>
+                <p>Refresh data after updating configuration.</p>
+            </div>
+        </mat-tab>
+        @if(!data().hideAttributes) {
+        <mat-tab label="Attribute">
+            <div class="attribute-tab-content">
+                <div class="assets-list">
+                    <mat-list>
+                        <div mat-subheader>Assets list:</div>
+                        @for (asset of assets; track asset.$anchor) {
+                            <mat-list-item class="asset-list-item" (click)="selectAsset(asset.$anchor)" [class]="(selObj()==asset.$anchor)?'selected':''">
+                                <mat-icon matListItemIcon>precision_manufacturing</mat-icon>
+                                <div matListItemTitle>{{asset.$displayname['xx-XX']}}</div>
+                            </mat-list-item>
+                        }
+                    </mat-list>
+                </div>
+
+                <div class="attributes-list">
+                    @if(objAttr().length > 0) {
+                        <mat-list>
+                            <div mat-subheader>Attributes list:</div>
+                            @for (attribute of objAttr(); track attribute.$anchor) {
+                                <mat-list-item (click)="selectAttribute(attribute.$anchor)" [class]="(selAttr()==attribute.$anchor)?'selected':''">
+                                    <mat-icon matListItemIcon>sell</mat-icon>
+                                    <div matListItemTitle>{{attribute.$name}} - ({{attribute.$datatype}})</div>
+                                </mat-list-item>
+                            }
+                        </mat-list>
+                        
+                    } @else {
+                        <div class="no-attributes-info">
+                            <mat-icon>info</mat-icon>
+                            <p>No attributes found in this asset!</p>
+                        </div>   
+                    }
+                    
+                </div>
+            </div>
+            <p>Save after modifying the attribute</p>
+        </mat-tab>
+        }
+        <mat-tab label="Advanced">
+            <div class="advanced-tab-content">
+                @if(!data().configPage) {
+                    <div class="no-properties">
+                        <mat-icon>info</mat-icon>
+                        <p>There is no advanced properties for this widget!</p>
+                    </div>  
+                } @else {
+                    <div>
+                        <ng-container [ngComponentOutlet]="data().configPage" [ngComponentOutletInputs]="{data: data()}"></ng-container>
+                    </div> 
+                    
+                }
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-icon-button mat-dialog-close (click)="saveData()"><mat-icon>save</mat-icon></button>
+  <button mat-icon-button mat-dialog-close><mat-icon>close</mat-icon></button>
+</mat-dialog-actions>

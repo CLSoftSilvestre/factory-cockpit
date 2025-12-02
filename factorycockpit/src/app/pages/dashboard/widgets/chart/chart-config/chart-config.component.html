@@ -1,0 +1,76 @@
+<form class="content">
+
+    <mat-form-field [style.width.px]=350>
+        <mat-label><mat-icon>badge</mat-icon> Chart title</mat-label>
+        <input matInput type="text" [value]="data().configuration.label" (change)="widgetValueChartLableChanged($event)">
+    </mat-form-field>
+
+    <mat-form-field [style.width.px]=350>
+        <mat-label><mat-icon>area_chart</mat-icon> Chart type</mat-label>
+        <mat-select required (selectionChange)="widgetChartTypeChanged($event)" [value]="data().configuration.chart_type">
+            <mat-option value="line">Line</mat-option>
+            <mat-option value="bar">Bars</mat-option>
+            <mat-option value="scatter">Scatter</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field [style.width.px]=350>
+        <mat-label><mat-icon>money</mat-icon> Units of Measure</mat-label>
+        <input matInput type="text" [value]="data().configuration.units" (change)="widgetValueUnitsChanged($event)">
+    </mat-form-field>
+
+    <mat-form-field [style.width.px]=350>
+        <mat-label><mat-icon>timer</mat-icon> Timespan (hours)</mat-label>
+        <input matInput type="number" min="1" max="24" [value]="data().configuration.timespan" (change)="widgetValueTimespanChanged($event)">
+    </mat-form-field>
+
+    <mat-form-field [style.width.px]=350>
+        <mat-label><mat-icon>moving</mat-icon> Line tension</mat-label>
+        <input matInput type="number" min="0" max="1" step="0.1" [value]="data().configuration.chart_tension" (change)="widgetValueChartTensionChanged($event)">
+    </mat-form-field>
+
+    <mat-form-field [style.width.px]=350>
+        <mat-label><mat-icon>timer</mat-icon> Points calculation interval (minutes)</mat-label>
+        <input matInput type="number" min="1" max="240" [value]="data().configuration.chart_aggregation_timerange" (change)="widgetValueIntervalChanged($event)">
+    </mat-form-field>
+
+    <mat-form-field [style.width.px]=350>
+        <mat-label><mat-icon>calculate</mat-icon> Points calculation method</mat-label>
+        <mat-select required (selectionChange)="widgetMethodChanged($event)" [value]="data().configuration.chart_aggregation_method">
+            <mat-option value="None">None</mat-option>
+            <mat-option value="Count">Count</mat-option>
+            <mat-option value="Average">Average</mat-option>
+            <mat-option value="Min">Min</mat-option>
+            <mat-option value="Max">Max</mat-option>
+            <mat-option value="Sum">Sum</mat-option>
+            <mat-option value="First">First</mat-option>
+            <mat-option value="Last">Last</mat-option>
+            <mat-option value="StandardDeviation">Standard Deviation</mat-option>
+            <mat-option value="Counter">Counter</mat-option>
+            <mat-option value="PowerToEnergy">Power to Energy</mat-option>
+            <mat-option value="EnergyToPower">Energy to Power</mat-option>
+            <mat-option value="FlowToAmount">Flow to Amount</mat-option>
+            <mat-option value="AmountToFlow">Amount to Flow</mat-option>
+            <mat-option value="TimeWeightedAverage">Time Weighted Average</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    
+    <!--p>Stepped data ?</p>
+    <mat-button-toggle-group name="steppedData" #toggleBtn="matButtonToggleGroup" [value]="selectedStepState">
+        <mat-button-toggle [value]="toggleEnum.Yes" (click)="widgetStepDataClick(true)">Yes</mat-button-toggle>
+        <mat-button-toggle [value]="toggleEnum.No" (click)="widgetStepDataClick(false)">No</mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <br>
+
+    <p>Interpolate data ?</p>
+    <mat-button-toggle-group name="interpolateData" #toggleBtn="matButtonToggleGroup" [value]="selectedInterpolateState">
+        <mat-button-toggle [value]="toggleEnum.Yes" (click)="widgetInterpolateClick(true)">Yes</mat-button-toggle>
+        <mat-button-toggle [value]="toggleEnum.No" (click)="widgetInterpolateClick(false)">No</mat-button-toggle>
+    </mat-button-toggle-group-->
+
+    
+</form>
+<p>Refresh data after updating configuration.</p>
+

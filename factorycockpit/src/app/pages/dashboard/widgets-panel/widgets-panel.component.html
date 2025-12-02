@@ -1,0 +1,16 @@
+<div class="widgets-list">
+    <div class="widgets-panel-header">
+        <mat-icon>drag_indicator</mat-icon>
+        Widgets library
+    </div>
+    @for (widget of store.widgetsStore(); track widget.templateId) {
+        <div cdkDrag class="widget-box" [cdkDragData]="widget.uuid">
+            <div class="library-item">
+                <mat-icon>{{widget.icon}}</mat-icon>
+                <p>{{ widget.label }}</p>
+            </div>
+            
+            <div *cdkDragPlaceholder></div>
+        </div>
+    }
+</div>

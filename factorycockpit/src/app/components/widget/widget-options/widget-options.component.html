@@ -1,0 +1,31 @@
+<button mat-icon-button class="close-button" (click)="showOptions.set(false)"><mat-icon>close</mat-icon></button>
+
+<div>
+    <mat-icon>horizontal_distribute</mat-icon>
+    <mat-button-toggle-group hideSingleSelectionIndicator="true" [value]="data().columns ?? 1" (change)="store.updateWidget(data().uuid, { columns: +$event.value})">
+        <mat-button-toggle [value]="1">1</mat-button-toggle>
+        <mat-button-toggle [value]="2">2</mat-button-toggle>
+        <mat-button-toggle [value]="3">3</mat-button-toggle>
+        <mat-button-toggle [value]="4">4</mat-button-toggle>
+        <mat-button-toggle [value]="5">5</mat-button-toggle>
+        <mat-button-toggle [value]="6">6</mat-button-toggle>
+    </mat-button-toggle-group>
+</div>
+
+<div>
+    <mat-icon>vertical_distribute</mat-icon>
+    <mat-button-toggle-group hideSingleSelectionIndicator="true" [value]="data().rows ?? 1" (change)="store.updateWidget(data().uuid, { rows: +$event.value})">
+        <mat-button-toggle [value]="1">1</mat-button-toggle>
+        <mat-button-toggle [value]="2">2</mat-button-toggle>
+        <mat-button-toggle [value]="3">3</mat-button-toggle>
+        <mat-button-toggle [value]="4">4</mat-button-toggle>
+        <mat-button-toggle [value]="5">5</mat-button-toggle>
+        <mat-button-toggle [value]="6">6</mat-button-toggle>
+    </mat-button-toggle-group>
+</div>
+
+<button mat-icon-button class="move-forward-button" (click)="store.moveWidgetToRight(data().uuid)"><mat-icon>chevron_right</mat-icon></button>
+
+<button mat-icon-button class="move-backward-button" (click)="store.moveWidgetToLeft(data().uuid)"><mat-icon>chevron_left</mat-icon></button>
+
+<button mat-icon-button class="remove-widget-button" (click)="store.removeWidget(data().uuid)"><mat-icon>delete</mat-icon></button>

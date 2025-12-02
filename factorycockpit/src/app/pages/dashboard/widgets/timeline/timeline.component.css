@@ -1,0 +1,4 @@
+.chart-container {
+    height: calc(100% - 30px);
+    width: 100%;
+}

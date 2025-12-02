@@ -1,0 +1,13 @@
+<div>
+    <mat-list cdkScrollable>
+        @for (item of items; track item.timestamp) {
+            <div class="list-item">
+                <mat-list-item>
+                    <h3 matListItemTitle>{{item.value}}</h3>
+                    <p matListItemLine class="timestamp-text">{{item.timestamp}}</p>   
+                </mat-list-item>
+            </div>
+            <hr>
+        }
+    </mat-list>
+</div>

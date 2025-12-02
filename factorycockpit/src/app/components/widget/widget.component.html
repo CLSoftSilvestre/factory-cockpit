@@ -1,0 +1,15 @@
+<div 
+    class="container mat-elevation-z3"
+    [style.background-color]="data().backgroundColor ?? 'var(--sys-surface-bright)'"
+    [style.color]="data().color ?? 'inherit'" 
+    cdkDrag 
+    cdkDragPreviewContainer="parent">
+
+    <app-widget-header [data]="data()" [(showOptions)]="showOptions"></app-widget-header>
+    <ng-container [ngComponentOutlet]="data().content" [ngComponentOutletInputs]="{config: data().configuration,}"></ng-container>
+
+    @if (showOptions()) {
+        <app-widget-options [(showOptions)]="showOptions" [data]="data()"></app-widget-options>
+    }
+    <div *cdkDragPlaceholder></div>
+</div>

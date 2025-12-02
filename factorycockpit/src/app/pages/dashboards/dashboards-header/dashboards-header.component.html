@@ -1,0 +1,7 @@
+<div class="header">
+    <h2 class="mat-title-large">Dashboards list</h2>
+    <div class="spacer"></div>
+    <input type="file" type="file" accept=".json" class="file-input"(change)="onFileSelected($event)" #fileUpload>
+    <button mat-raised-button disabled class="btnImport" (click)="fileUpload.click()"><mat-icon>file_upload</mat-icon> Import</button>
+    <button mat-raised-button class="btnNew" (click)="createNewDashboard()"><mat-icon>add</mat-icon> New</button>
+</div>

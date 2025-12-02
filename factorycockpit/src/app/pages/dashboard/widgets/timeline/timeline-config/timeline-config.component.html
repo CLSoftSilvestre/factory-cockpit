@@ -1,0 +1,52 @@
+<form class="content">
+
+    <mat-form-field [style.width.px]=350>
+        <mat-label><mat-icon>badge</mat-icon> Chart title</mat-label>
+        <input matInput type="text" [value]="data().configuration.label" (change)="widgetValueChartLableChanged($event)">
+    </mat-form-field>
+
+    <mat-form-field [style.width.px]=350>
+        <mat-label><mat-icon>timer</mat-icon> Timespan (hours)</mat-label>
+        <input matInput type="number" min="1" max="24" [value]="data().configuration.timespan" (change)="widgetValueTimespanChanged($event)">
+    </mat-form-field>
+
+    <mat-list>
+        <div mat-subheader>Modes list:</div>
+
+        @for (mode of data().configuration.timeline_modes; track mode.code) {
+            <mat-list-item style="min-height: 80px;">
+                <div class="timeline-line-item">
+                    <mat-form-field [style.height.px]=45 [style.width.px]=100 appearance="outline">
+                        <mat-label><mat-icon>numbers</mat-icon> Code</mat-label>
+                        <input matInput type="number" [value]="mode.code" (change)="editModeCode(mode.code, $event, data().configuration.timeline_modes)">
+                    </mat-form-field>
+
+                    <mat-form-field [style.width.px]=250 appearance="outline">
+                        <mat-label><mat-icon>text_format</mat-icon> Status name</mat-label>
+                        <input matInput type="text" [value]="mode.name" (change)="editModeName(mode.code, $event, data().configuration.timeline_modes)">
+                    </mat-form-field>
+
+                    <mat-form-field [style.width.px]=100 appearance="outline">
+                        <mat-label><mat-icon>palette</mat-icon> Color</mat-label>
+                        <input matInput type="color" [value]="mode.color" (change)="editModeColor(mode.code, $event, data().configuration.timeline_modes)">
+                    </mat-form-field>
+
+                    <button mat-icon-button (click)="deleteMode(mode.code, data().configuration.timeline_modes)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+
+                </div>
+                
+                <mat-divider></mat-divider>
+            </mat-list-item>
+        }
+    </mat-list>
+
+    <button mat-icon-button (click)="addMode(data().configuration.timeline_modes)">
+        <mat-icon>add_circle</mat-icon>
+    </button>
+    
+</form>
+
+
+<p>Refresh data after updating configuration.</p>

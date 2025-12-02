@@ -1,0 +1,13 @@
+<div>
+    <div class="row mb-8 mt-8">
+        <mat-icon>{{difference()>=0?"arrow_circle_up":"arrow_circle_down"}}</mat-icon>
+        <p class="stat" [ngClass]="status()">{{value()}} {{units()}}</p>
+        <p class="stat-difference">{{difference()>=0?"+":""}} {{difference()}} vs last period.</p>
+    </div>
+    <mat-progress-bar mode="determinate" value="{{value()}}"></mat-progress-bar>
+    <div class="text-dim-gray stat-subtext">
+        <span class="text-green">{{name()}}</span> {{timestamp()}}.
+    </div>
+</div>
+
+

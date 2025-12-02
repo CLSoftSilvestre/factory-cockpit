@@ -1,0 +1,30 @@
+.example-card {
+  max-width: 400px;
+}
+
+.example-header-image {
+  background-image: url('./../../../assets/logo.png');
+  background-size: cover;
+}
+
+mat-card {
+    min-height: 80px;
+    min-width: 320px;
+    /*background-color: var(--sys-secondary-container);*/
+    /*background-color: var(--sys-surface-variant);*/
+    box-shadow: 3px 3px var(--sys-outline-variant);
+}
+
+mat-card-subtitle {
+    font-size: small;
+}
+
+mat-card-actions {
+    > button {
+        margin: 10px;
+    }
+}
+
+.delete-button {
+  color: var(--sys-error) !important;
+}
