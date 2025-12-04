@@ -32,15 +32,18 @@ class IedToken {
             }),
         };
 
-        const api_url = process.env.SERVER + "/device/edge/api/v2/login/direct";
-        const fetch_response = await fetch(api_url, requestOptions);
-        const json = await fetch_response.json();
+        // const api_url = process.env.SERVER + "/device/edge/api/v2/login/direct";
+        // const fetch_response = await fetch(api_url, requestOptions);
+        // const json = await fetch_response.json();
 
         console.log("New IED access token retrieved.");
 
-        IedToken.authToken = json['accessToken'];
-        IedToken.expiresAt = Number(json['expiresAt']);
-        IedToken.refreshToken = json['refreshToken'];
+        // IedToken.authToken = json['accessToken'];
+        // IedToken.expiresAt = Number(json['expiresAt']);
+        // IedToken.refreshToken = json['refreshToken'];
+        IedToken.authToken = "asasbasbasbasab";
+        IedToken.expiresAt = Number(Date.now()/100) + 3600;
+        IedToken.refreshToken = "bahdausadnasduas";
 
     }
 

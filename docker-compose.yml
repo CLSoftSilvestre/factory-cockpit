@@ -1,12 +1,11 @@
 version: '2.4'
 services:
   api:
-    image: 'factorycockpitapi:latest'
+    image: 'factorycockpit/api:1.0.0'
+    container_name: factorycockpitapi
     mem_limit: 128mb
     expose:
       - "3000"
-    ports:
-      - "3000:3000"
     restart: unless-stopped
     networks:
       - proxy-redirect
@@ -14,12 +13,11 @@ services:
       - ./api-factorycockpit/database:/usr/src/app/database
   
   frontend:
-    image: 'factorycokpit:latest'
+    image: 'factorycockpit/frontend:1.0.0'
+    container_name: factorycockpitfront
     mem_limit: 512mb
-    expose:
-      - "4200"
     ports:
-      - "4200:4200"
+      - "50080:80"
     restart: unless-stopped
     networks:
       - proxy-redirect

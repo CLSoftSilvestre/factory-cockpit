@@ -54,6 +54,8 @@ router.get("/", async (req, res) => {
     const api_url = process.env.SERVER + "/DataService/anchor/v1/assets?take=10000&offset=0&selectors=+$displayname,+$name,-$attributes";
     const fetch_response = await fetch(api_url, requestOptions);
 
+    console.log(fetch_response);
+
     if (fetch_response.status != 200) {
         res.sendStatus(503);
     } else {
