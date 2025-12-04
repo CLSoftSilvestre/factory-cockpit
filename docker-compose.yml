@@ -6,11 +6,13 @@ services:
     mem_limit: 128mb
     expose:
       - "3000"
+    ports:
+      - "50081:3000"
     restart: unless-stopped
     networks:
       - proxy-redirect
     volumes:
-      - ./api-factorycockpit/database:/usr/src/app/database
+      - factorycockpit-database:/usr/src/app/database
   
   frontend:
     image: 'factorycockpit/frontend:1.0.0'
@@ -23,6 +25,9 @@ services:
       - proxy-redirect
     depends_on:
       - api
+
+volumes:
+  factorycockpit-database:
 
 networks:
   proxy-redirect:

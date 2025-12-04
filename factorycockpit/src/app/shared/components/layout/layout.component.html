@@ -11,14 +11,6 @@
       <mat-icon>dark_mode</mat-icon>
     }
   </button>
-  @if (appStore.user(); as user) {
-    <button mat-icon-button [mat-menu-trigger-for]="profileMenu">
-      <mat-icon>person</mat-icon>
-    </button>
-    <mat-menu #profileMenu="matMenu">
-      <button mat-menu-item (click)="appStore.logout()"><mat-icon>logout</mat-icon> Logout</button>
-    </mat-menu>
-  }
 
 </mat-toolbar>
 <mat-sidenav-container>

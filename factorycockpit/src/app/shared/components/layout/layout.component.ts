@@ -5,7 +5,6 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterOutlet } from '@angular/router';
 import { CustomSidenavComponent } from '../../../components/custom-sidenav/custom-sidenav.component';
-import { AppStore } from '../../../app.store';
 import { MatMenuModule } from "@angular/material/menu";
 import { UserPreferencesService } from '../../../services/user-preferences.service';
 
@@ -18,7 +17,6 @@ import { UserPreferencesService } from '../../../services/user-preferences.servi
 })
 export class LayoutComponent {
   collapsed = signal(true);
-  appStore = inject(AppStore);
   preferences = inject(UserPreferencesService);
 
   sidenavWidth = computed(() => this.collapsed() ? '65px' : '250px');
