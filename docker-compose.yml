@@ -4,6 +4,11 @@ services:
     image: 'factorycockpit/api:1.0.0'
     container_name: factorycockpitapi
     mem_limit: 128mb
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "2"
     expose:
       - "3000"
     restart: unless-stopped
@@ -16,6 +21,11 @@ services:
     image: 'factorycockpit/frontend:1.0.0'
     container_name: factorycockpitfront
     mem_limit: 512mb
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "2"
     ports:
       - "50080:80"
     restart: unless-stopped
@@ -24,11 +34,14 @@ services:
     depends_on:
       - api
 
-volumes:
-  factorycockpit-database:
-
+##### NETWORKS #####
 networks:
   proxy-redirect:
-    external: true
-    name: proxy-redirect
+    external:
+      name: proxy-redirect
+    driver: bridge
+
+##### VOLUMES #####
+volumes:
+  factorycockpit-database:
     
