@@ -10,7 +10,7 @@ services:
         max-size: "10m"
         max-file: "2"
     expose:
-      - "3000"
+      - "8500"
     restart: unless-stopped
     networks:
       - proxy-redirect
@@ -27,7 +27,7 @@ services:
         max-size: "10m"
         max-file: "2"
     ports:
-      - "50080:80"
+      - "50080:8580"
     restart: unless-stopped
     networks:
       - proxy-redirect

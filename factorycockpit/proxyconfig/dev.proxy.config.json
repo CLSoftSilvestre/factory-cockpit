@@ -1,6 +1,6 @@
 {
     "/api": {
-        "target":"http://factorycockpitapi:3000",
+        "target":"http://factorycockpitapi:8500",
         "secure":false,
         "changeOrigin":true,
         "logLevel": "debug",

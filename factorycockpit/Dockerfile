@@ -26,7 +26,7 @@ COPY --from=build /usr/src/app/default.conf /etc/nginx/conf.d/
 COPY --from=build /usr/src/app/dist/factorycockpit/browser /usr/share/nginx/html
 
 # Expose port 80
-EXPOSE 80
+EXPOSE 8580
 
 # Start Nginx server
 CMD ["nginx", "-g", "daemon off;"]

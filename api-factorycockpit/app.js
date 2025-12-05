@@ -40,7 +40,7 @@ const app = express();
 
 const swaggerSpec = swaggerJSDoc(options)
 
-const port = Number(process.env.port) || 3000;
+const port = Number(process.env.port) || 8500;
 
 setupLogging(app);
 
