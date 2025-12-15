@@ -15,6 +15,6 @@
   },
   "scripts": {
     "start": "nodemon app.js",
-    "devStart": "nodemon app.js"
+    "devStart": "nodemon --env-file=.local.env app.js"
   }
 }

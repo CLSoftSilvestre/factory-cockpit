@@ -5,11 +5,12 @@ import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DashboardsNewDialogComponent } from '../dashboards-new-dialog/dashboards-new-dialog.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-dashboards-header',
   standalone: true,
-  imports: [MatIcon, MatButtonModule, MatDialogModule],
+  imports: [MatIcon, MatButtonModule, MatDialogModule, MatTooltipModule],
   providers: [DashboardService],
   templateUrl: './dashboards-header.component.html',
   styleUrl: './dashboards-header.component.css'

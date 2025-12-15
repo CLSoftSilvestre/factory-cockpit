@@ -8,11 +8,12 @@ import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { DataService } from '../../../shared/services/data.service';
 import { ServerDasboard } from '../../../shared/interfaces/server-dashboards';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-dashboard-header',
   standalone: true,
-  imports: [MatButtonModule, MatIcon, MatMenuModule, WidgetsPanelComponent, CdkDropList, CdkDrag],
+  imports: [MatButtonModule, MatIcon, MatMenuModule, WidgetsPanelComponent, CdkDropList, CdkDrag, MatTooltipModule],
   templateUrl: './dashboard-header.component.html',
   styleUrl: './dashboard-header.component.css'
 })

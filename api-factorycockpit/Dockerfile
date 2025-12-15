@@ -11,4 +11,4 @@ RUN npm install
 
 EXPOSE 8500
 
-CMD ["npm", "run", "devStart"]
+CMD ["npm", "run", "start"]

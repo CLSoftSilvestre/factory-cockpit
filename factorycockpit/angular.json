@@ -63,11 +63,12 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "proxyConfig": "proxyconfig/dev.proxy.config.json"
+            "proxyConfig": "proxyconfig/local.proxy.config.json"
           },
           "configurations": {
             "production": {
-              "buildTarget": "factorycockpit:build:production"
+              "buildTarget": "factorycockpit:build:production",
+              "proxyConfig": "proxyconfig/dev.proxy.config.json"
             },
             "development": {
               "buildTarget": "factorycockpit:build:development"

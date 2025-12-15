@@ -1,15 +1,14 @@
 <div class="header">
     <h2 class="mat-title-large">Dashboard - {{dashboardname()}}</h2>
     <div class="spacer"></div>
-    <button mat-raised-button class="btnImport" (click)="saveDashboard()"><mat-icon>save</mat-icon> Save</button>
-    <button mat-raised-button disabled class="btnExport" (click)="exportDashboard()"><mat-icon>file_download</mat-icon> Export</button>
-    <button mat-raised-button (click)="widgetsOpen.set(!widgetsOpen())">
+    <button mat-icon-button class="btnImport" (click)="saveDashboard()" matTooltip="Save dashboard"><mat-icon>save</mat-icon></button>
+    <button mat-icon-button disabled class="btnExport" (click)="exportDashboard()" matTooltip="Export dashboard"><mat-icon>file_download</mat-icon></button>
+    <button mat-icon-button (click)="widgetsOpen.set(!widgetsOpen())" matTooltip="Add widgets">
         @if (widgetsOpen()) {
             <mat-icon>close</mat-icon>
         } @else {
             <mat-icon>add_circle</mat-icon>
         }
-        Widgets
     </button>
     @if (widgetsOpen()) {
         <app-widgets-panel cdkDropList (cdkDropListDropped)="widgetPutBack($event)" cdkDrag></app-widgets-panel>
