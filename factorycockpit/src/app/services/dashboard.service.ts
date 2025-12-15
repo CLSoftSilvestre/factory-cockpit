@@ -14,6 +14,7 @@ import { TimelineComponent } from '../pages/dashboard/widgets/timeline/timeline.
 import { TimelineConfigComponent } from '../pages/dashboard/widgets/timeline/timeline-config/timeline-config.component';
 import { DataService } from '../shared/services/data.service';
 import { ServerDasboard } from '../shared/interfaces/server-dashboards';
+import { Observable } from 'rxjs';
 
 
 @Injectable()
@@ -360,7 +361,7 @@ export class DashboardService {
     return null
   }
 
-  saveDashboard(dashboardId: string) {
+  saveDashboard(dashboardId: string) : Observable<ServerDasboard> {
     const widgetsWithoutContent: Partial<Widget>[] = this.addedWidgets().map(w => ({...w}));
     widgetsWithoutContent.forEach(w => {
       delete w.content;
@@ -369,9 +370,7 @@ export class DashboardService {
 
     const dashboardData = widgetsWithoutContent;
 
-    this.dataService.saveDashboardsById(dashboardId, dashboardData).subscribe(data => {
-      console.log(data);
-    });
+    return this.dataService.saveDashboardsById(dashboardId, dashboardData);
 
   }
 

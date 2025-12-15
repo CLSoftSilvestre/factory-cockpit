@@ -9,6 +9,7 @@ import { DataService } from '../../../shared/services/data.service';
 import { ServerDasboard } from '../../../shared/interfaces/server-dashboards';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-dashboard-header',
@@ -22,6 +23,7 @@ export class DashboardHeaderComponent {
   private activatedRoute = inject(ActivatedRoute)
   private router = inject(Router);
   private dataService = inject(DataService);
+  private _snackBar = inject(MatSnackBar)
   store = inject(DashboardService);
   dashboardname = signal("");
   dashboardid = signal("");
@@ -52,7 +54,9 @@ export class DashboardHeaderComponent {
 
   saveDashboard() {
     if (this.dashboardid()) {
-      this.store.saveDashboard(this.dashboardid())
+      this.store.saveDashboard(this.dashboardid()).subscribe((data) => {
+        this._snackBar.open('Dashboard '+ data.title + ' saved successfully ', 'Close', {  duration: 3000,});
+      });
     }
     
   }

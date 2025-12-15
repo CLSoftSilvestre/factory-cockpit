@@ -1,6 +1,8 @@
 <div class="header">
     <h2 class="mat-title-large">Dashboard - {{dashboardname()}}</h2>
     <div class="spacer"></div>
+    <button mat-icon-button class="btnSelToday" matTooltip="Select today"><mat-icon>today</mat-icon></button>
+    <button mat-icon-button class="btnSelDate" matTooltip="Select date"><mat-icon>calendar_month</mat-icon></button>
     <button mat-icon-button class="btnImport" (click)="saveDashboard()" matTooltip="Save dashboard"><mat-icon>save</mat-icon></button>
     <button mat-icon-button disabled class="btnExport" (click)="exportDashboard()" matTooltip="Export dashboard"><mat-icon>file_download</mat-icon></button>
     <button mat-icon-button (click)="widgetsOpen.set(!widgetsOpen())" matTooltip="Add widgets">
