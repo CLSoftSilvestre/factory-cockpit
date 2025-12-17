@@ -18,7 +18,6 @@ export class CalendarPanelComponent {
   @Output() selectedDate = new EventEmitter<Date | null>();
 
   onDateChange(value: Date | null) {
-    // console.log(value);
     // Emit end of the day
     let endofday = new Date(value?value:0)
 

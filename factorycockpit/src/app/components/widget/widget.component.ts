@@ -19,7 +19,7 @@ import { WidgetHeaderComponent } from "./widget-header/widget-header.component";
 export class WidgetComponent {
 
   data = input.required<Widget>();
-
+  viewDate = input.required<Date | null>();
   showOptions = signal(false);
 
 }

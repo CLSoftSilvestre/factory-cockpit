@@ -86,6 +86,10 @@ export class CardComponent implements OnInit, OnDestroy, OnChanges {
       difference = 24*60*60*1000
     }
 
+    console.log("viewDate: ", this.viewdate());
+    console.log("dayplusone: ", dayplusone);
+    console.log("endDate:", endDate);
+
     var endTime = endDate.toISOString()
     var startTime = new Date(endDate.valueOf() - difference).toISOString()
 

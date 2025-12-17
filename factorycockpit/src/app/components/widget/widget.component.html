@@ -6,7 +6,7 @@
     cdkDragPreviewContainer="parent">
 
     <app-widget-header [data]="data()" [(showOptions)]="showOptions"></app-widget-header>
-    <ng-container [ngComponentOutlet]="data().content" [ngComponentOutletInputs]="{config: data().configuration,}"></ng-container>
+    <ng-container [ngComponentOutlet]="data().content" [ngComponentOutletInputs]="{config: data().configuration, viewdate:viewDate()}"></ng-container>
 
     @if (showOptions()) {
         <app-widget-options [(showOptions)]="showOptions" [data]="data()"></app-widget-options>

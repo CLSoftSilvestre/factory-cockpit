@@ -1,4 +1,5 @@
 import { Component, computed, effect, inject, signal, Output, EventEmitter } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -17,7 +18,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
   selector: 'app-dashboard-header',
   standalone: true,
   providers: [provideNativeDateAdapter()],
-  imports: [MatButtonModule, MatIcon, MatMenuModule, WidgetsPanelComponent, CalendarPanelComponent, CdkDropList, CdkDrag, MatTooltipModule],
+  imports: [DatePipe, MatButtonModule, MatIcon, MatMenuModule, WidgetsPanelComponent, CalendarPanelComponent, CdkDropList, CdkDrag, MatTooltipModule],
   templateUrl: './dashboard-header.component.html',
   styleUrl: './dashboard-header.component.css'
 })
