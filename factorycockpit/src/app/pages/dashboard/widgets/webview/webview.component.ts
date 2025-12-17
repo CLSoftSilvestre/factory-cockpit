@@ -11,6 +11,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 })
 export class WebviewComponent {
   config = input("__config__");
+  viewdate = input("__viewdate__");
   sanitizedUrl: SafeResourceUrl;
   
   ngOnInit() {

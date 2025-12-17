@@ -1,0 +1,9 @@
+<div class="calendar-list">
+    <div class="calendar-panel-header">
+        <mat-icon>drag_indicator</mat-icon>
+        Select date
+    </div>
+    <div class="inline-calendar">
+        <mat-calendar [dateFilter]="dateFilter" [(selected)]="selected" (selectedChange)="onDateChange($event)"></mat-calendar>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, input, OnChanges, OnDestroy, OnInit, signal } from '@angular/core';
 import { DataService } from '../../../../shared/services/data.service';
 import { NgClass } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -14,9 +14,10 @@ import { MatIcon } from '@angular/material/icon';
   templateUrl: './indicator.component.html',
   styleUrl: './indicator.component.css'
 })
-export class IndicatorComponent implements OnInit, OnDestroy {
+export class IndicatorComponent implements OnInit, OnDestroy, OnChanges {
   private refreshSub?: Subscription;
   config = input("__config__");
+  viewdate = input("__viewdate__");
   private dataService = inject(DataService);
 
   value = signal(""); // Value from actual period
@@ -32,20 +33,22 @@ export class IndicatorComponent implements OnInit, OnDestroy {
   timestamp = signal("");
   status = signal("kpi-ok");
 
+  private configuration = null
+
   constructor(private refreshService: RefreshTimerService) {}
 
   ngOnInit() {
     const config = this.config()
     var config2 = JSON.stringify(config);
-    var config3 = JSON.parse(config2);
+    this.configuration = JSON.parse(config2);
 
-    this.units.set(config3['units']);
-    this.refreshData(config3);
+    this.units.set(this.configuration!['units']);
+    this.refreshData();
 
     // Start the global refresh timer (you can control where to call this)
     this.refreshService.startRefresh(60000); // every 1 minute
     this.refreshSub = this.refreshService.refresh$.subscribe(() => {
-      this.refreshData(config3);
+      this.refreshData();
     });
 
   }
@@ -54,27 +57,57 @@ export class IndicatorComponent implements OnInit, OnDestroy {
     this.refreshSub?.unsubscribe();
   }
 
-  refreshData(config3:any) {
+  ngOnChanges(changes:any) {
+    if (changes.viewdate) {
+      if (changes.viewdate.previousValue) {
+        if (changes.viewdate.currentValue != changes.viewdate.previousValue) {
+          this.refreshData();
+        }
+      } 
+    } 
+  }
+
+  refreshData() {
     
     // Setup times (default 1 hour)
-    var endTime = new Date(Date.now()).toISOString()
-    var startTime = new Date(Date.now() - (config3['timespan']?config3['timespan']*60*60*1000:60 * 60 * 1000)).toISOString()
-    var previousStartTime = new Date(Date.parse(startTime) - (config3['timespan']?config3['timespan']*60*60*1000:60 * 60 * 1000)).toISOString()
+    // var endTime = new Date(Date.now()).toISOString()
+    // var startTime = new Date(Date.now() - (this.configuration!['timespan']?this.configuration!['timespan']*60*60*1000:60 * 60 * 1000)).toISOString()
+    // var previousStartTime = new Date(Date.parse(startTime) - (this.configuration!['timespan']?this.configuration!['timespan']*60*60*1000:60 * 60 * 1000)).toISOString()
 
-    if(config3['attribute']!="") {
-      const calculation_method = config3['chart_aggregation_method']?config3['chart_aggregation_method']:"Average";
-      const timespan = config3['timespan']?config3['timespan']*60*60*1000:60 * 60 * 1000;
+    let dayplusone = new Date(this.viewdate())
+    dayplusone.setDate(dayplusone.getDate() + 1)
+    var endDate = new Date(dayplusone);
+    var now = new Date(Date.now())
+    var difference = this.configuration?this.configuration['timespan']*60*60*1000:60 * 60 * 1000;
+    
+    let tomorrow = now.getDate() + 1
+
+    if (this.viewdate() == "" || (endDate.getDate() == tomorrow)) {
+      endDate = new Date(Date.now())
+    } else {
+      // Show one complete day
+      difference = 24*60*60*1000
+    }
+
+    var endTime = endDate.toISOString()
+    var startTime = new Date(endDate.valueOf() - difference).toISOString()
+    var previousStartTime = new Date(Date.parse(startTime) - difference).toISOString()
+
+
+    if(this.configuration!['attribute']!="") {
+      const calculation_method = this.configuration!['chart_aggregation_method']?this.configuration!['chart_aggregation_method']:"None";
+      const timespan = this.configuration!['timespan']?this.configuration!['timespan']*60*60*1000:60 * 60 * 1000;
       
       if (calculation_method != "None") {
         // Actual period
-        this.dataService.getAttributeTrend(config3['attribute'], startTime, endTime, timespan, calculation_method).subscribe((data) => {
+        this.dataService.getAttributeTrend(this.configuration!['attribute'], startTime, endTime, timespan, calculation_method).subscribe((data) => {
         const retval = JSON.parse(data);
 
         // Check if value is number
           if (isNaN(retval[0].values[0].value)){
             this.value.set(retval[0].values[0].value);
           } else {
-            var decimals = config3['decimals']?Number(config3['decimals']):2;
+            var decimals = this.configuration!['decimals']?Number(this.configuration!['decimals']):2;
             let val = Number(retval[0].values[0].value).toFixed(decimals)
             this.value.set(String(val));
 
@@ -94,14 +127,14 @@ export class IndicatorComponent implements OnInit, OnDestroy {
         });
 
         // Previous period
-        this.dataService.getAttributeTrend(config3['attribute'], previousStartTime, startTime, timespan, calculation_method).subscribe((data) => {
+        this.dataService.getAttributeTrend(this.configuration!['attribute'], previousStartTime, startTime, timespan, calculation_method).subscribe((data) => {
         const retval = JSON.parse(data);
 
         // Check if value is number
           if (isNaN(retval[0].values[0].value)){
             this.last_value.set(retval[0].values[0].value);
           } else {
-            var decimals = config3['decimals']?Number(config3['decimals']):2;
+            var decimals = this.configuration!['decimals']?Number(this.configuration!['decimals']):2;
             let val = Number(retval[0].values[0].value).toFixed(decimals)
             this.last_value.set(String(val));
           }
@@ -110,13 +143,13 @@ export class IndicatorComponent implements OnInit, OnDestroy {
 
       } else {
         // Just get the last value
-        this.dataService.getAttributeCurrentValue(config3['attribute']).subscribe((data) => {
+        this.dataService.getAttributeCurrentValue(this.configuration!['attribute']).subscribe((data) => {
           //const data2 = JSON.parse(data);
           // Check if value is number
           if (isNaN(data.$value)){
             this.value.set(data.$value);
           } else {
-            var decimals = config3['decimals']?Number(config3['decimals']):2;
+            var decimals = this.configuration!['decimals']?Number(this.configuration!['decimals']):2;
             let val = Number(data.$value).toFixed(decimals)
             this.value.set(String(val));
 

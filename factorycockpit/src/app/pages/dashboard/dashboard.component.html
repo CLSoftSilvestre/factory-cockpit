@@ -1,9 +1,9 @@
 <div cdkDropListGroup>
-    <app-dashboard-header></app-dashboard-header>
+    <app-dashboard-header (selectedViewDate)="changeDate($event)"></app-dashboard-header>
 
     <div #dashboard class="dashboard-widgets" >
         @for (widget of store.addedWidgets(); track widget.uuid) {
-        <app-widget [data]="widget" cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListData]="widget.uuid"></app-widget>
+        <app-widget [data]="widget" [viewDate]="viewDate()" cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListData]="widget.uuid"></app-widget>
         }
         <div cdkDropList (cdkDropListDropped)="drop($event)"></div>
     </div>

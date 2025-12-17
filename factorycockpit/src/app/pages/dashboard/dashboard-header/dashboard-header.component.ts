@@ -1,20 +1,23 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal, Output, EventEmitter } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { DashboardService } from '../../../services/dashboard.service';
 import { WidgetsPanelComponent } from '../widgets-panel/widgets-panel.component';
+import { CalendarPanelComponent } from '../calendar-panel/calendar-panel.component';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { DataService } from '../../../shared/services/data.service';
 import { ServerDasboard } from '../../../shared/interfaces/server-dashboards';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'app-dashboard-header',
   standalone: true,
-  imports: [MatButtonModule, MatIcon, MatMenuModule, WidgetsPanelComponent, CdkDropList, CdkDrag, MatTooltipModule],
+  providers: [provideNativeDateAdapter()],
+  imports: [MatButtonModule, MatIcon, MatMenuModule, WidgetsPanelComponent, CalendarPanelComponent, CdkDropList, CdkDrag, MatTooltipModule],
   templateUrl: './dashboard-header.component.html',
   styleUrl: './dashboard-header.component.css'
 })
@@ -32,6 +35,12 @@ export class DashboardHeaderComponent {
   fileName = '';
 
   widgetsOpen = signal(false);
+  calendarOpen = signal(false);
+  calendarView = signal("hidden");
+  selectedDate = signal(new Date());
+  @Output() selectedViewDate = new EventEmitter<Date | null>();
+
+  isOnline = true
 
   widgetPutBack(event: CdkDragDrop<number, any>) {
     const { previousContainer } = event;
@@ -59,6 +68,22 @@ export class DashboardHeaderComponent {
       });
     }
     
+  }
+
+  changeDate(value: Date | null) {
+    let yesterday = new Date(value?value:0)
+    //yesterday.setDate(yesterday.getDate() - 1)
+    this.selectedDate.set(yesterday);
+    this.selectedViewDate.emit(value)
+
+    // Check if data is today
+    let today = new Date(Date.now())
+
+    if(yesterday.toDateString() == today.toDateString()) {
+      this.isOnline = true
+    } else {
+      this.isOnline = false
+    }
   }
 
   constructor() {

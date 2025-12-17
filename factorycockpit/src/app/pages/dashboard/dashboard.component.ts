@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, viewChild } from '@angular/core';
+import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { WidgetComponent } from "../../components/widget/widget.component";
 import { DashboardService } from '../../services/dashboard.service';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,6 +25,8 @@ export class DashboardComponent {
 
   dashboard = viewChild.required<ElementRef>('dashboard');
 
+  viewDate = signal(new Date());
+
   ngOnInit() {   
     const { unwrapGrid } = wrapGrid(this.dashboard().nativeElement, { duration: 300 });
     this.clearAnimations = unwrapGrid;
@@ -32,6 +34,10 @@ export class DashboardComponent {
 
   ngOnDestroy() {
     this.clearAnimations();
+  }
+
+  changeDate(ev: any) {
+    this.viewDate.set(ev);
   }
 
   drop(event: CdkDragDrop<string, any>) {

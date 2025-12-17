@@ -1,4 +1,4 @@
-import {  Component, ElementRef, inject, input, OnDestroy, OnInit, viewChild } from '@angular/core';
+import {  Component, ElementRef, inject, input, OnChanges, OnDestroy, OnInit, viewChild } from '@angular/core';
 import Chart, { ChartDataset } from'chart.js/auto'
 import { DataService } from '../../../../shared/services/data.service';
 import 'chartjs-adapter-date-fns';
@@ -30,11 +30,17 @@ export interface edgeData {
   templateUrl: './timeline.component.html',
   styleUrl: './timeline.component.css'
 })
-export class TimelineComponent implements OnInit, OnDestroy{
+
+export class TimelineComponent implements OnInit, OnDestroy, OnChanges{
   private refreshSub?: Subscription;
   config = input("__config__");
+  viewdate = input("__viewdate__");
   chart = viewChild.required<ElementRef>('chart');
   private dataService = inject(DataService);
+
+  // Global data for chart generation
+  private configuration = null
+  private chartInstance:any
 
   timelineData = {
       labels: ['Status'],
@@ -61,13 +67,13 @@ export class TimelineComponent implements OnInit, OnDestroy{
   
     const config = this.config()
     var config2 = JSON.stringify(config);
-    var config3 = JSON.parse(config2);
+    this.configuration = JSON.parse(config2);
 
     // Setup times (default 10 minutes)
-    var startTime = new Date(Date.now() - (config3['timespan']?config3['timespan']*60*60*1000:60 * 60 * 1000)).toISOString()
+    var startTime = new Date(Date.now() - (this.configuration!['timespan']?this.configuration!['timespan']*60*60*1000:60 * 60 * 1000)).toISOString()
   
     // Setup chart
-    const chart = new Chart(this.chart().nativeElement, {
+    this.chartInstance = new Chart(this.chart().nativeElement, {
       type: 'bar',
       data: this.timelineData,
       options: {
@@ -79,7 +85,12 @@ export class TimelineComponent implements OnInit, OnDestroy{
             time: {
               unit: 'hour',
             },
-            min: startTime
+            min: startTime,
+            ticks: {
+              font: {
+                size: 9
+              }
+            }
           },
           y: {
             beginAtZero: true,
@@ -128,18 +139,27 @@ export class TimelineComponent implements OnInit, OnDestroy{
                 return `From: ${formatedStartDate} to ${formatedEndDate}. Duration: ${totalHours}:${remMinutes}:${remSeconds}`;
               }
             }
+          },
+          legend: {
+            display: true,
+            labels: {
+              boxWidth: 10,
+              boxHeight: 10,
+              usePointStyle: true,
+              pointStyle: 'rectRounded'
+            }
           }
         },
         maintainAspectRatio: false,
       },
     })
 
-    this.refreshData(config3, chart);
+    this.refreshData();
 
     // Start the global refresh timer (you can control where to call this)
     this.refreshService.startRefresh(60000); // every 1 minute
     this.refreshSub = this.refreshService.refresh$.subscribe(() => {
-      this.refreshData(config3, chart);
+      this.refreshData();
     });
 
   }
@@ -148,13 +168,43 @@ export class TimelineComponent implements OnInit, OnDestroy{
     this.refreshSub?.unsubscribe();
   }
 
-  refreshData(config3:any, chart:any) {
-    var endTime = new Date(Date.now()).toISOString()
-    var startTime = new Date(Date.now() - (config3['timespan']?config3['timespan']*60*60*1000:60 * 60 * 1000)).toISOString()
+  ngOnChanges(changes:any) {
+    if (changes.viewdate) {
+      if (changes.viewdate.previousValue) {
+        if (changes.viewdate.currentValue != changes.viewdate.previousValue) {
+          this.refreshData();
+        }
+      } 
+    } 
+
+  }
+
+  refreshData() {
+
+    // Setup times (default 10 minutes)
+    let dayplusone = new Date(this.viewdate())
+    dayplusone.setDate(dayplusone.getDate() + 1)
+    var endDate = new Date(dayplusone);
+    var now = new Date(Date.now())
+    var difference = this.configuration?this.configuration['timespan']*60*60*1000:60 * 60 * 1000;
+    
+    let tomorrow = now.getDate() + 1
+
+    if (this.viewdate() == "" || (endDate.getDate() == tomorrow)) {
+      endDate = new Date(Date.now())
+    } else {
+      // Show one complete day
+      difference = 24*60*60*1000
+    }
+
+    var endTime = endDate.toISOString()
+    var startTime = new Date(endDate.valueOf() - difference).toISOString()
+
+    this.chartInstance.options.scales.x.min = startTime;
 
     this.timelineData.datasets = [];
 
-    this.dataService.getAttributeData(config3['attribute'], startTime, endTime, config3['interpolate']?config3['interpolate']:false, 10000).subscribe((data) => {
+    this.dataService.getAttributeData(this.configuration!['attribute'], startTime, endTime, this.configuration!['interpolate']?this.configuration!['interpolate']:false, 10000).subscribe((data) => {
       const retval = JSON.parse(data);
 
       // Array to ingest all the processed
@@ -167,7 +217,7 @@ export class TimelineComponent implements OnInit, OnDestroy{
         const DummyPoint: dataPoint = {x: [0, 0], y: 'Status'}
 
         // Get the mode configuration
-        const modeConfig: TimelineMode[] = config3['timeline_modes'].filter((item:TimelineMode) => item.code == curMode);
+        const modeConfig: TimelineMode[] = (this.configuration as any)['timeline_modes'].filter((item:TimelineMode) => item.code == curMode);
 
         if(modeConfig.length>0) {
           let dataset:timelineDataset = {
@@ -176,13 +226,18 @@ export class TimelineComponent implements OnInit, OnDestroy{
             backgroundColor: [modeConfig[0].color?modeConfig[0].color:this.getRandomColor()],
           }
 
+          dataset.data.pop();
+
           // LOOP of data
           for (let index = 0; index < retval.data[0].values.length; index++) {
             let start = <number>retval.data[0].values[index].timestamp;
-            let end = Date.now();
+            //let end = new Date(this.viewdate()).valueOf();
+            let end = new Date(endTime).valueOf();
+
             if (index < retval.data[0].values.length -1) {
               end = <number>retval.data[0].values[index+1].timestamp;
             }
+
             let mode = retval.data[0].values[index].value;
 
             if( mode == curMode) {
@@ -200,7 +255,7 @@ export class TimelineComponent implements OnInit, OnDestroy{
       
       }
         
-      chart.update();
+      this.chartInstance.update();
     });
 
   }

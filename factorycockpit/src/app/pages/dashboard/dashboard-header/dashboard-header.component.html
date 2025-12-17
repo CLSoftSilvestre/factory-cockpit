@@ -1,8 +1,29 @@
 <div class="header">
-    <h2 class="mat-title-large">Dashboard - {{dashboardname()}}</h2>
+    <div class="report-info">
+        <h2 class="mat-title-large">{{dashboardname()}}</h2>
+
+        @if(!isOnline) {
+            <p>({{selectedDate()|date}} <mat-icon>today</mat-icon>)</p> 
+        } @else {
+            <p>(Live<mat-icon>online_prediction</mat-icon>)</p>
+        }
+          
+    </div>
+    
+
     <div class="spacer"></div>
-    <button mat-icon-button class="btnSelToday" matTooltip="Select today"><mat-icon>today</mat-icon></button>
-    <button mat-icon-button class="btnSelDate" matTooltip="Select date"><mat-icon>calendar_month</mat-icon></button>
+
+    <!-- Datepicker -->
+    <button mat-icon-button (click)="calendarOpen.set(!calendarOpen())" matTooltip="Select date">
+        @if (calendarOpen()) {
+            <mat-icon>edit_calendar</mat-icon>
+        } @else {
+            <mat-icon>calendar_month</mat-icon>
+        }
+    </button>
+    <app-calendar-panel cdkDrag [hidden]="!calendarOpen()" (selectedDate)="changeDate($event)"></app-calendar-panel>
+    <!-- End datepicker -->
+     
     <button mat-icon-button class="btnImport" (click)="saveDashboard()" matTooltip="Save dashboard"><mat-icon>save</mat-icon></button>
     <button mat-icon-button disabled class="btnExport" (click)="exportDashboard()" matTooltip="Export dashboard"><mat-icon>file_download</mat-icon></button>
     <button mat-icon-button (click)="widgetsOpen.set(!widgetsOpen())" matTooltip="Add widgets">

@@ -1,4 +1,4 @@
-import { Component, inject, input, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, inject, input, OnChanges, OnDestroy, OnInit, signal } from '@angular/core';
 import { DataService } from '../../../../shared/services/data.service';
 import { CdkFixedSizeVirtualScroll, CdkVirtualForOf } from "@angular/cdk/scrolling";
 import { MatListModule } from '@angular/material/list';
@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './list-items.component.html',
   styleUrl: './list-items.component.css'
 })
-export class ListItemsComponent implements OnInit, OnDestroy {
+export class ListItemsComponent implements OnInit, OnDestroy, OnChanges {
   private refreshSub?: Subscription;
 
   items = [
@@ -24,21 +24,24 @@ export class ListItemsComponent implements OnInit, OnDestroy {
   ];
 
   config = input("__config__");
+  viewdate = input("__viewdate__");
   private dataService = inject(DataService);
+
+  private configuration = null
   
   constructor(private refreshService: RefreshTimerService) {}
 
   ngOnInit() {
     const config = this.config()
     var config2 = JSON.stringify(config);
-    var config3 = JSON.parse(config2);
+    this.configuration = JSON.parse(config2);
 
-    this.refreshData(config3);
+    this.refreshData();
 
     // Start the global refresh timer (you can control where to call this)
     this.refreshService.startRefresh(60000); // every 1 minute
     this.refreshSub = this.refreshService.refresh$.subscribe(() => {
-      this.refreshData(config3);
+      this.refreshData();
     });
 
   }
@@ -47,16 +50,44 @@ export class ListItemsComponent implements OnInit, OnDestroy {
     this.refreshSub?.unsubscribe();
   }
 
-  refreshData(config3:any) {
+  ngOnChanges(changes:any) {
+    if (changes.viewdate) {
+      if (changes.viewdate.previousValue) {
+        if (changes.viewdate.currentValue != changes.viewdate.previousValue) {
+          this.refreshData();
+        }
+      } 
+    } 
+  }
+
+  refreshData() {
 
     // Setup times (default 10 minutes)
-    var endTime = new Date(Date.now()).toISOString()
-    var startTime = new Date(Date.now() - (config3['timespan']?config3['timespan']*60*60*1000:60 * 60 * 1000)).toISOString()
+    //var endTime = new Date(Date.now()).toISOString()
+    //var startTime = new Date(Date.now() - (this.configuration!['timespan']?this.configuration!['timespan']*60*60*1000:60 * 60 * 1000)).toISOString()
+
+    let dayplusone = new Date(this.viewdate())
+    dayplusone.setDate(dayplusone.getDate() + 1)
+    var endDate = new Date(dayplusone);
+    var now = new Date(Date.now())
+    var difference = this.configuration?this.configuration['timespan']*60*60*1000:60 * 60 * 1000;
+    
+    let tomorrow = now.getDate() + 1
+
+    if (this.viewdate() == "" || (endDate.getDate() == tomorrow)) {
+      endDate = new Date(Date.now())
+    } else {
+      // Show one complete day
+      difference = 24*60*60*1000
+    }
+
+    var endTime = endDate.toISOString()
+    var startTime = new Date(endDate.valueOf() - difference).toISOString()
 
     this.items = [];
 
     // Get data
-    this.dataService.getAttributeData(config3['attribute'], startTime, endTime, config3['interpolate']?config3['interpolate']:false, 10000).subscribe((data) => {
+    this.dataService.getAttributeData(this.configuration!['attribute'], startTime, endTime, this.configuration!['interpolate']?this.configuration!['interpolate']:false, 10000).subscribe((data) => {
         const retval = JSON.parse(data);
         this.items = retval.data[0].values;
 

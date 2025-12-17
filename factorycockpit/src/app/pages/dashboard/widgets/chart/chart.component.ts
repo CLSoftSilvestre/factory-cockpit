@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, input, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
+import { Component, computed, ElementRef, inject, input, OnChanges, OnDestroy, OnInit, Signal, signal, SimpleChange, viewChild } from '@angular/core';
 import Chart, { ChartDataset } from'chart.js/auto'
 import { DataService } from '../../../../shared/services/data.service';
 import 'chartjs-adapter-date-fns';
@@ -12,11 +12,17 @@ import { Subscription } from 'rxjs';
   templateUrl: './chart.component.html',
   styleUrl: './chart.component.css'
 })
-export class ChartComponent implements OnInit, OnDestroy{
+export class ChartComponent implements OnInit, OnDestroy, OnChanges{
   private refreshSub?: Subscription;
   config = input("__config__");
+  viewdate = input("__viewdate__");
+
   chart = viewChild.required<ElementRef>('chart');
   private dataService = inject(DataService);
+
+  // Global data for chart generation
+  private configuration = null
+  private chartInstance:any
 
   // Chart configuration variable
   countEventsData: ChartDataset[] = [
@@ -29,16 +35,23 @@ export class ChartComponent implements OnInit, OnDestroy{
 
     const config = this.config()
     var config2 = JSON.stringify(config);
-    var config3 = JSON.parse(config2);
-    this.countEventsData[0].label = config3['label'];
+    this.configuration = JSON.parse(config2);
 
-    const chart_type = config3['chart_type']?config3['chart_type']:'line';
+    if (!this.configuration) {
+      return
+    }
+
+    this.countEventsData[0].label = this.configuration['label'];
+
+  
+    const chart_type = this.configuration['chart_type']?this.configuration['chart_type']:'bar';
+
     if (chart_type == 'bar') {
       this.countEventsData[0].backgroundColor = 'rgb(0, 106, 63)';
     }
 
     // Setup chart
-    const chart = new Chart(this.chart().nativeElement, {
+    this.chartInstance = new Chart(this.chart().nativeElement, {
       type: chart_type,
       data: {
         datasets: this.countEventsData,
@@ -49,32 +62,37 @@ export class ChartComponent implements OnInit, OnDestroy{
             type: 'time',
             time: {
               unit: 'hour',
+            },
+            ticks: {
+              font: {
+                size: 9
+              }
             }
           },
           y: {
             title: {
-              display: config3['units']?true:false,
+              display: this.configuration['units']?true:false,
               align: 'center',
-              text: config3['units']?config3['units']:"" 
+              text: this.configuration['units']?this.configuration['units']:"" 
             }
           }
         },
         maintainAspectRatio: false,
         elements: {
           line: {
-            tension: config3['chart_tension']?config3['chart_tension']:0.4,
-            stepped: config3['chart_step']?config3['chart_step']:false,
+            tension: this.configuration['chart_tension']?this.configuration['chart_tension']:0.4,
+            stepped: this.configuration['chart_step']?this.configuration['chart_step']:false,
           },
         },
       },
     })
 
-    this.refreshData(config3, chart);
+    this.refreshData();
 
     // Start the global refresh timer (you can control where to call this)
     this.refreshService.startRefresh(60000); // every 1 minute
     this.refreshSub = this.refreshService.refresh$.subscribe(() => {
-      this.refreshData(config3, chart);
+      this.refreshData();
     });
 
   }
@@ -83,15 +101,44 @@ export class ChartComponent implements OnInit, OnDestroy{
     this.refreshSub?.unsubscribe();
   }
 
-  refreshData(config3:any, chart:any) {
+  ngOnChanges(changes:any) {
+    if (changes.viewdate) {
+      if (changes.viewdate.previousValue) {
+        if (changes.viewdate.currentValue != changes.viewdate.previousValue) {
+          this.refreshData();
+        }
+      } 
+    } 
+  }
+
+  refreshData() {
+
+    if (!this.configuration) {
+      return
+    }
 
     this.countEventsData[0].data = [];
 
     // Setup times (default 10 minutes)
-    var endTime = new Date(Date.now()).toISOString()
-    var startTime = new Date(Date.now() - (config3['timespan']?config3['timespan']*60*60*1000:60 * 60 * 1000)).toISOString() 
+    let dayplusone = new Date(this.viewdate())
+    dayplusone.setDate(dayplusone.getDate() + 1)
+    var endDate = new Date(dayplusone);
+    var now = new Date(Date.now())
+    var difference = this.configuration?this.configuration['timespan']*60*60*1000:60 * 60 * 1000;
 
-    this.dataService.getAttributeTrend(config3['attribute'], startTime, endTime, config3['chart_aggregation_timerange'], config3['chart_aggregation_method']).subscribe((data) => {
+    let tomorrow = now.getDate() + 1
+
+    if (this.viewdate() == "" || (endDate.getDate() == tomorrow)) {
+      endDate = new Date(Date.now())
+    } else {
+      // Show one complete day
+      difference = 24*60*60*1000
+    }
+
+    var endTime = endDate.toISOString()
+    var startTime = new Date(endDate.valueOf() - difference).toISOString()
+
+    this.dataService.getAttributeTrend(this.configuration['attribute'], startTime, endTime, this.configuration['chart_aggregation_timerange'], this.configuration['chart_aggregation_method']).subscribe((data) => {
         const retval = JSON.parse(data);
 
         for (let index = 0; index < retval[0].values.length; index++) {
@@ -106,10 +153,11 @@ export class ChartComponent implements OnInit, OnDestroy{
           this.countEventsData[0].data.push(point);
           
         }
-        chart.update();
+        this.chartInstance.update();
 
     });
 
   }
 
 }
+
