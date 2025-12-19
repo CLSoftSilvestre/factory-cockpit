@@ -95,6 +95,13 @@ export class WidgetConfigDialogComponent {
 
   selectAttribute(attributeId: string) {
     this.selAttr.set(attributeId);
+    
+    this.store.updateWidgetConfiguration(
+        this.data().uuid,
+        {
+          attribute: this.selAttr()
+        }
+      );
   }
 
   saveData() {

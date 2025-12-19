@@ -43,9 +43,23 @@ button {
 
     mat-icon {
         font-size: medium;
-        padding-left: 5px;
+        padding-left: 7px;
         padding-top: 3px;
         padding-right: 1px;
     }
 
+}
+
+/* the animation of the online icon */
+@keyframes myAnimation {
+    from { color: var(--sys-error);}
+    to { color: var(--sys-on-error);}
+}
+
+.online-icon {
+    color: var(--sys-error);
+    animation-name: myAnimation;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
 }

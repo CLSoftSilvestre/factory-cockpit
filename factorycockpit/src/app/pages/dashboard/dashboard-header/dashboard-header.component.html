@@ -1,11 +1,11 @@
 <div class="header">
     <div class="report-info">
-        <h2 class="mat-title-large">{{dashboardname()}}</h2>
+        <h2 class="mat-title-large">Dashboard {{dashboardname()}}</h2>
 
         @if(!isOnline) {
             <p>({{selectedDate()|date}} <mat-icon>today</mat-icon>)</p> 
         } @else {
-            <p>(Live<mat-icon>online_prediction</mat-icon>)</p>
+            <p><mat-icon matTooltip="Live data" class="online-icon">online_prediction</mat-icon></p>
         }
           
     </div>
