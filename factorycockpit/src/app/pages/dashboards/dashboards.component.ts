@@ -10,11 +10,13 @@ import { DashboardsHeaderComponent } from "./dashboards-header/dashboards-header
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { DashboardsDeleteDialogComponent } from './dashboards-delete-dialog/dashboards-delete-dialog.component';
 
 @Component({
   selector: 'app-dashboards',
   standalone: true,
-  imports: [MatChipsModule, MatGridListModule, MatCardModule, MatButtonModule, MatIconModule, DashboardsHeaderComponent, MatMenuModule, MatTooltipModule],
+  imports: [MatChipsModule, MatGridListModule, MatCardModule, MatButtonModule, MatIconModule, DashboardsHeaderComponent, MatMenuModule, MatTooltipModule, MatDialogModule],
   templateUrl: './dashboards.component.html',
   styleUrl: './dashboards.component.css'
 })
@@ -24,17 +26,29 @@ export class DashboardsComponent implements OnInit {
   dashboardsList: ServerDasboard[] = []
   breakpoint: number | undefined;
 
+  deleteConfirmationDialog = inject(MatDialog);
+
   navigateToDashboard(dashboardId: string) {
     this.router.navigate(['/dashboard', dashboardId]).then(() => {
     });
   }
 
   deleteDashboard(dashboardId: string) {
-    this.dataService.deleteDashboard(dashboardId).subscribe(data => {
-      this.dataService.getDashboardsList().subscribe(data => {
-        this.dashboardsList = data;
-      });
-    }).add(window.location.reload());
+
+    const dialogRef = this.deleteConfirmationDialog.open(DashboardsDeleteDialogComponent, {
+      data: {dashboardId}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+
+        this.dataService.deleteDashboard(dashboardId).subscribe(data => {
+          this.dataService.getDashboardsList().subscribe(data => {
+            this.dashboardsList = data;
+          });
+        }).add(window.location.reload());
+      }
+    });
   }
 
   onResize(event: any) {

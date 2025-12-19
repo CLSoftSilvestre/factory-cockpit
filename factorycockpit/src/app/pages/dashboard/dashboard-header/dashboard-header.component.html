@@ -22,7 +22,7 @@
             <mat-icon>calendar_month</mat-icon>
         }
     </button>
-    <app-calendar-panel cdkDrag [hidden]="!calendarOpen()" (selectedDate)="changeDate($event)"></app-calendar-panel>
+    <app-calendar-panel data-html2canvas-ignore cdkDrag [hidden]="!calendarOpen()" (selectedDate)="changeDate($event)"></app-calendar-panel>
     <!-- End datepicker -->
 
     <button mat-icon-button data-html2canvas-ignore class="btnImport" (click)="saveDashboard()" matTooltip="Save dashboard"><mat-icon>save</mat-icon></button>
@@ -36,6 +36,6 @@
         }
     </button>
     @if (widgetsOpen()) {
-        <app-widgets-panel cdkDropList (cdkDropListDropped)="widgetPutBack($event)" cdkDrag></app-widgets-panel>
+        <app-widgets-panel data-html2canvas-ignore cdkDropList (cdkDropListDropped)="widgetPutBack($event)" cdkDrag></app-widgets-panel>
     }
 </div>

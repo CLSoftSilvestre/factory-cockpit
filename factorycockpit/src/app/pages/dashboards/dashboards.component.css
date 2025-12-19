@@ -46,10 +46,6 @@ p {
   overflow-y:auto;
 }
 
-.delete-button {
-  color: var(--sys-error) !important;
-}
-
 .dashboard-image {
   height: 120px;
   margin: 10px;
