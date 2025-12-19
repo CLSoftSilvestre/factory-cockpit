@@ -31,7 +31,7 @@
                         <button mat-icon-button matSuffix type="button" (click)="resetBackgroundColor()" matTooltip="Reset to default color"><mat-icon>restart_alt</mat-icon></button>
                     </mat-form-field>
                 </form>
-                <p>Refresh data after updating configuration.</p>
+                <p>Save dashboard after updating configurations.</p>
             </div>
         </mat-tab>
         @if(!data().hideAttributes) {
@@ -70,7 +70,7 @@
                     
                 </div>
             </div>
-            <p>Save after modifying the attribute</p>
+            <!--p>Save dashboard after updating configurations.</p-->
         </mat-tab>
         }
         <mat-tab label="Advanced">
@@ -92,6 +92,6 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-    <button mat-icon-button mat-dialog-close (click)="saveData()"><mat-icon>save</mat-icon></button>
-  <button mat-icon-button mat-dialog-close><mat-icon>close</mat-icon></button>
+    <!--button mat-icon-button mat-dialog-close (click)="saveData()"><mat-icon>save</mat-icon></button-->
+    <button mat-icon-button mat-dialog-close><mat-icon>close</mat-icon></button>
 </mat-dialog-actions>

@@ -10,7 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 @Component({
   selector: 'app-dashboards-header',
   standalone: true,
-  imports: [MatIcon, MatButtonModule, MatDialogModule, MatTooltipModule],
+  imports: [MatTooltipModule, MatIcon, MatButtonModule, MatDialogModule],
   providers: [DashboardService],
   templateUrl: './dashboards-header.component.html',
   styleUrl: './dashboards-header.component.css'

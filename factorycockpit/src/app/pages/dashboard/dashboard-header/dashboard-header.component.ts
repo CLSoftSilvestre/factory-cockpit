@@ -10,15 +10,21 @@ import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { DataService } from '../../../shared/services/data.service';
 import { ServerDasboard } from '../../../shared/interfaces/server-dashboards';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {provideNativeDateAdapter} from '@angular/material/core';
+import {MatTooltipModule} from '@angular/material/tooltip';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { provideNativeDateAdapter } from '@angular/material/core';
+import * as jsPDF from 'jspdf';
+import html2canvas from 'html2canvas-pro';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard-header',
   standalone: true,
   providers: [provideNativeDateAdapter()],
-  imports: [DatePipe, MatButtonModule, MatIcon, MatMenuModule, WidgetsPanelComponent, CalendarPanelComponent, CdkDropList, CdkDrag, MatTooltipModule],
+  imports: [CommonModule, DatePipe, MatButtonModule, MatIcon, MatMenuModule, WidgetsPanelComponent, CalendarPanelComponent, CdkDropList, CdkDrag, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatTooltipModule],
   templateUrl: './dashboard-header.component.html',
   styleUrl: './dashboard-header.component.css'
 })
@@ -52,23 +58,66 @@ export class DashboardHeaderComponent {
     this.store.exportDashboard();
   }
 
+  exportPDF() {
+    const data = document.getElementById('print-area');
+    html2canvas(data!, {scale: 1.1}).then(canvas => {
+
+      // Generate Image of DOM
+      // Dimensions of Dom Element
+      const printDim = data!.getBoundingClientRect();
+
+      const imgWidth = printDim?.width;
+      const imgHeight = printDim?.height;
+      const contentDataURL = canvas.toDataURL('image/png');
+
+      // Generated PDF
+      //const pdf = new jsPDF.jsPDF('l', 'px', 'a4'); // A4 size page of PDF
+      const pdf = new jsPDF.jsPDF('l','px',[imgWidth + 10, imgHeight + 10]); // The size of the image generated
+      const position = 5;
+      pdf.addImage(contentDataURL, 'PNG', 5, position, imgWidth, imgHeight);
+      let pdf_name = "report.pdf"
+      if (this.isOnline) {
+        pdf_name = this.dashboardname() + ".pdf"
+      } else {
+        pdf_name = this.dashboardname() + "_" + this.selectedDate().getDay() + "-" + this.selectedDate().getMonth() + "-" + this.selectedDate().getFullYear() + ".pdf";
+      }
+      pdf.save(pdf_name); // Save the generated PDF
+    });
+  }
+
   navigateToDashboard(dashboardId: string) {
     this.router.navigate(['/dashboard', dashboardId]).then(() => {
       window.location.reload();
     });
   }
 
-  createNewDashboard() {
-    // Open dialog to create a new dashboard
-  }
-
   saveDashboard() {
     if (this.dashboardid()) {
-      this.store.saveDashboard(this.dashboardid()).subscribe((data) => {
-        this._snackBar.open('Dashboard '+ data.title + ' saved successfully ', 'Close', {  duration: 3000,});
+      // Generate image of dashboard to save into database
+      const data = document.getElementById('print-area');
+      html2canvas(data!, {scale: 1.1}).then(canvas => {
+
+        // Generate Image of DOM
+        // Dimensions of Dom Element
+        const printDim = data!.getBoundingClientRect();
+
+        const imgWidth = printDim?.width;
+        const imgHeight = printDim?.height;
+        const contentDataURL = canvas.toDataURL('image/png');
+        console.log(contentDataURL);
+        //const imageBlob = contentDataURL.toBlob()
+
+        this.store.saveDashboardImage(this.dashboardid(), contentDataURL).subscribe((data) => {});
+
+        this.store.saveDashboard(this.dashboardid()).subscribe((data) => {
+            this._snackBar.open('Dashboard '+ data.title + ' saved successfully ', 'Reload page', {  duration: 5000,}).onAction().subscribe(() => {
+              location.reload();
+            });
+        });
+        
       });
-    }
-    
+
+    }  
   }
 
   changeDate(value: Date | null) {
@@ -104,3 +153,4 @@ export class DashboardHeaderComponent {
   }
   
 }
+

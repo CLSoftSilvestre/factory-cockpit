@@ -351,9 +351,9 @@ export class DashboardService {
 
   }
 
-  newDashboard(name: string) {
+  newDashboard(name: string, description: string, keywords: any) {
     if (name.length > 3) {
-      this.dataService.newDashboard(name).subscribe(data => {
+      this.dataService.newDashboard(name, description, keywords).subscribe(data => {
         console.log(data);
         return data.dashboard_id
       })
@@ -374,10 +374,11 @@ export class DashboardService {
 
   }
 
+  saveDashboardImage(dashboardId: string, image: string) : Observable<ServerDasboard> {
+    return this.dataService.saveDashboardsImageById(dashboardId, image);
+  }
+
   importDashboard(dashboard: string) {
-
-    //const widgetsAsString = localStorage.getItem('dashboardWidgets');
-
     if(dashboard){
       const widgets = JSON.parse(dashboard) as Widget[];
       widgets.forEach(widget => {
@@ -395,7 +396,6 @@ export class DashboardService {
 
       this.addedWidgets.set(widgets);
     }
-    //console.log(dashboard);
   }
 
   getListOfServerDashboards(): ServerDasboard[]{

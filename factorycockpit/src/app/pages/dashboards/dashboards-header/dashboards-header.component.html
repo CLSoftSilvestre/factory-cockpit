@@ -1,7 +1,7 @@
 <div class="header">
-    <h2 class="mat-title-large">Dashboards list</h2>
+    <h2 class="mat-title-large">Dashboards list:</h2>
     <div class="spacer"></div>
     <input type="file" type="file" accept=".json" class="file-input"(change)="onFileSelected($event)" #fileUpload>
-    <button mat-icon-button disabled class="btnImport" (click)="fileUpload.click()" matTooltip="Import Dashboard"><mat-icon>file_upload</mat-icon></button>
-    <button mat-icon-button class="btnNew" (click)="createNewDashboard()" matTooltip="New Dashboard"><mat-icon>add_circle</mat-icon></button>
+    <button mat-icon-button disabled matTooltip="Import dashboard" (click)="fileUpload.click()"><mat-icon>file_upload</mat-icon></button>
+    <button mat-icon-button matTooltip="New dashboard" (click)="createNewDashboard()"><mat-icon>dashboard_customize</mat-icon></button>
 </div>

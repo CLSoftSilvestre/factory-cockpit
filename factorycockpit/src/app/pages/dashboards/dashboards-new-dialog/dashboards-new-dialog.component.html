@@ -1,11 +1,43 @@
 <h2 mat-dialog-title>New dashboard</h2>
 
 <mat-dialog-content class="mat-typography">
-    <form class="basic-tab-content">
-        <mat-form-field [style.width.px]=350>
-            <mat-label><mat-icon>badge</mat-icon> Dashboard name</mat-label>
+    <form class="basic-tab-content" style="max-width: 500px;">
+        <mat-form-field [style.width.px]=500>
+            <mat-label><mat-icon>badge</mat-icon> Name</mat-label>
             <input matInput type="text" [(ngModel)]="dashboardName" [ngModelOptions]="{standalone: true}">
         </mat-form-field>
+
+        <mat-form-field [style.width.px]=500>
+            <mat-label><mat-icon>description</mat-icon> Description</mat-label>
+            <textarea matInput type="text" [(ngModel)]="dashboardDescription" [ngModelOptions]="{standalone: true}"></textarea>
+        </mat-form-field>
+        
+        <mat-form-field class="example-chip-list" [style.width.px]=500>
+            <mat-label><mat-icon>label</mat-icon> Keywords</mat-label>
+            <mat-chip-grid #chipGrid aria-label="Enter keywords">
+                @for (keyword of keywords(); track keyword) {
+                <mat-chip-row
+                    (removed)="remove(keyword)"
+                    [editable]="true"
+                    (edited)="edit(keyword, $event)"
+                    [aria-description]="'press enter to edit ' + keyword.name"
+                >
+                    {{keyword.name}}
+                    <button matChipRemove [attr.aria-label]="'remove ' + keyword.name">
+                    <mat-icon>cancel</mat-icon>
+                    </button>
+                </mat-chip-row>
+                }
+                <input
+                placeholder="New keyword..."
+                [matChipInputFor]="chipGrid"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="addOnBlur"
+                (matChipInputTokenEnd)="add($event)"
+                />
+            </mat-chip-grid>
+        </mat-form-field>
+
     </form>
 </mat-dialog-content>
 

@@ -130,13 +130,28 @@ export class DataService {
   }
 
   /**
+   * Save the specified dashboard image
+   * @returns the dashboard in the server
+   */
+  saveDashboardsImageById(dashboardId: string, image: any) {
+    const url = 'api/dashboards/' + dashboardId + '/image';
+
+    const formData = new FormData();
+    formData.append('image', image);
+
+    return this.http.post<ServerDasboard>(url, formData);
+  }
+
+  /**
    * Create new dashboard
    * @returns the new dashboard created
    */
-  newDashboard(name: string) {
+  newDashboard(name: string, description: string, keywords: any) {
     const url = 'api/dashboards/';
     const body = {
-      title: name
+      title: name,
+      description: description,
+      keywords: JSON.stringify(keywords),
     };
     return this.http.post<ServerDasboard>(url, body);
   }

@@ -1,11 +1,12 @@
 <div class="header">
+
     <div class="report-info">
         <h2 class="mat-title-large">Dashboard {{dashboardname()}}</h2>
 
         @if(!isOnline) {
             <p>({{selectedDate()|date}} <mat-icon>today</mat-icon>)</p> 
         } @else {
-            <p><mat-icon matTooltip="Live data" class="online-icon">online_prediction</mat-icon></p>
+            <p><mat-icon data-html2canvas-ignore matTooltip="Live data" class="online-icon">online_prediction</mat-icon></p>
         }
           
     </div>
@@ -14,7 +15,7 @@
     <div class="spacer"></div>
 
     <!-- Datepicker -->
-    <button mat-icon-button (click)="calendarOpen.set(!calendarOpen())" matTooltip="Select date">
+    <button mat-icon-button data-html2canvas-ignore (click)="calendarOpen.set(!calendarOpen())" matTooltip="Select date">
         @if (calendarOpen()) {
             <mat-icon>edit_calendar</mat-icon>
         } @else {
@@ -23,10 +24,11 @@
     </button>
     <app-calendar-panel cdkDrag [hidden]="!calendarOpen()" (selectedDate)="changeDate($event)"></app-calendar-panel>
     <!-- End datepicker -->
-     
-    <button mat-icon-button class="btnImport" (click)="saveDashboard()" matTooltip="Save dashboard"><mat-icon>save</mat-icon></button>
-    <button mat-icon-button disabled class="btnExport" (click)="exportDashboard()" matTooltip="Export dashboard"><mat-icon>file_download</mat-icon></button>
-    <button mat-icon-button (click)="widgetsOpen.set(!widgetsOpen())" matTooltip="Add widgets">
+
+    <button mat-icon-button data-html2canvas-ignore class="btnImport" (click)="saveDashboard()" matTooltip="Save dashboard"><mat-icon>save</mat-icon></button>
+    <button mat-icon-button data-html2canvas-ignore class="btnExportPDF" (click)="exportPDF()" matTooltip="Export to PDF"><mat-icon>picture_as_pdf</mat-icon></button>
+    <button mat-icon-button data-html2canvas-ignore class="btnExport" (click)="exportDashboard()" matTooltip="Download dashboard"><mat-icon>file_download</mat-icon></button>
+    <button mat-icon-button data-html2canvas-ignore (click)="widgetsOpen.set(!widgetsOpen())" matTooltip="Add widget">
         @if (widgetsOpen()) {
             <mat-icon>close</mat-icon>
         } @else {

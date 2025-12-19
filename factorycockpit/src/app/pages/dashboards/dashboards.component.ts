@@ -1,19 +1,20 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ServerDasboard } from '../../shared/interfaces/server-dashboards';
 import { DataService } from '../../shared/services/data.service';
-import {MatGridListModule} from '@angular/material/grid-list';
-import {MatButton, MatButtonModule} from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDivider } from "@angular/material/divider";
 import { DashboardsHeaderComponent } from "./dashboards-header/dashboards-header.component";
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-dashboards',
   standalone: true,
-  imports: [MatGridListModule, MatCardModule, MatButtonModule, MatIconModule, MatDivider, DashboardsHeaderComponent, MatMenuModule],
+  imports: [MatChipsModule, MatGridListModule, MatCardModule, MatButtonModule, MatIconModule, DashboardsHeaderComponent, MatMenuModule, MatTooltipModule],
   templateUrl: './dashboards.component.html',
   styleUrl: './dashboards.component.css'
 })

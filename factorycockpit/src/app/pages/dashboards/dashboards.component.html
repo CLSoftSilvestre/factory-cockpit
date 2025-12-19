@@ -1,24 +1,31 @@
 <app-dashboards-header></app-dashboards-header>
 
-<mat-grid-list [cols]="breakpoint" rowHeight="3:2" (window:resize)="onResize($event)">
+<mat-grid-list [cols]="breakpoint" rowHeight="3:3" (window:resize)="onResize($event)">
     @for (item of dashboardsList; track item.dashboard_id) {
         <mat-grid-tile>
 
             <mat-card class="example-card" appearance="outlined" >
-                <mat-card-header>
-                    <div mat-card-avatar class="example-header-image"></div>
+                @if (item.image) {
+                    <img mat-card-image class="dashboard-image" src="{{item.image}}" alt="Dashboard thumbnail" (click)="navigateToDashboard(item.dashboard_id)">
+                } @else {
+                    <img mat-card-image class="dashboard-image" src="../../../assets/no_image.jpg" alt="Dashboard thumbnail" (click)="navigateToDashboard(item.dashboard_id)">
+                }
+                
+                <mat-card-content (click)="navigateToDashboard(item.dashboard_id)">
                     <mat-card-title>{{item.title}}</mat-card-title>
-                    <mat-card-subtitle>{{item.created_at}}</mat-card-subtitle>
-                </mat-card-header>
-                <mat-divider></mat-divider>
-                <mat-card-content>
-                    @for (widget of item.data; track widget.id) {
-                        <p>{{widget.label}}</p>
-                    }
+                    <p>{{item.description}}</p>
                 </mat-card-content>
+
+                <mat-chip-set class="keyword-list" aria-label="Keywords" role="list">
+                    @for (keyword of item.keywords; track keyword) {
+                        <mat-chip class="keyword-chip">{{keyword.name}}</mat-chip>
+                    }
+                </mat-chip-set>
+                
                 <mat-card-actions align="end">
-                    <button mat-raised-button (click)="navigateToDashboard(item.dashboard_id)"><mat-icon>dashboard</mat-icon>View</button>
-                    <button mat-icon-button class="delete-button" (click)="deleteDashboard(item.dashboard_id)"><mat-icon>delete</mat-icon></button>
+                    <button mat-icon-button matTooltip="Add to favorites"><mat-icon>star_border</mat-icon></button>
+                    <button mat-icon-button matTooltip="Edit properties"><mat-icon>edit</mat-icon></button>
+                    <button mat-icon-button matTooltip="Delete dashboard" class="delete-button" (click)="deleteDashboard(item.dashboard_id)"><mat-icon>delete</mat-icon></button>
                 </mat-card-actions>
 
             </mat-card>

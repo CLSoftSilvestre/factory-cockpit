@@ -1,18 +1,32 @@
 .example-card {
-  max-width: 400px;
+  max-width: 300px;
+  height: 330px;
+  background-color: var(--sys-on-secondary)
+}
+
+.example-card:hover {
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 8px, rgba(0, 0, 0, 0.22) 0px 5px 10px;
 }
 
 .example-header-image {
   background-image: url('./../../../assets/logo.png');
   background-size: cover;
+  padding: 0px;
+  margin: 0px;
 }
 
 mat-card {
     min-height: 80px;
     min-width: 320px;
-    /*background-color: var(--sys-secondary-container);*/
-    /*background-color: var(--sys-surface-variant);*/
-    box-shadow: 3px 3px var(--sys-outline-variant);
+    /*box-shadow: 3px 3px var(--sys-outline-variant);*/
+}
+
+mat-card-content {
+  cursor:pointer;
+}
+
+mat-card-header {
+  padding: 10px 10px;
 }
 
 mat-card-subtitle {
@@ -20,11 +34,42 @@ mat-card-subtitle {
 }
 
 mat-card-actions {
-    > button {
-        margin: 10px;
-    }
+  padding-top: 0px;
+  > button {
+      margin: 10px;
+  }
+}
+
+p {
+  font-size: small;
+  height: 70px;
+  overflow-y:auto;
 }
 
 .delete-button {
   color: var(--sys-error) !important;
 }
+
+.dashboard-image {
+  height: 120px;
+  margin: 10px;
+  object-fit:cover;
+  cursor:pointer;
+}
+
+.keyword-list {
+  min-height: 30px;
+  margin-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  overflow-y:auto;
+}
+
+.keyword-chip {
+  --mdc-chip-label-text-color: var(--sys-primary-container);
+  --mdc-chip-label-text-size : 4.5em;
+  background-color: var(--sys-on-primary-container) !important;
+  height: 18px;
+  font-size: 0.15em !important;
+}
+
