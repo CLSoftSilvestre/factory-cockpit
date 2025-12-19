@@ -1,9 +1,9 @@
 import database from './database.js';
 
 const createDashboard = database.prepare(`
-    INSERT INTO dashboards (dashboard_id, title, data, created_at, created_by)
-    VALUES (?, ?, ?, ?, ?)
-    RETURNING dashboard_id, title, data, created_at, created_by`
+    INSERT INTO dashboards (dashboard_id, title, description, data, keywords, created_at, created_by)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    RETURNING dashboard_id, title, description, data, keywords, created_at, created_by`
 );
 
 const getDashboardById = database.prepare(`
@@ -16,7 +16,12 @@ const getDashboards = database.prepare(`
 
 const updateDashboard = database.prepare(`
     UPDATE dashboards SET data = ? WHERE dashboard_id = ?
-    RETURNING dashboard_id, title, data, created_at, created_by`
+    RETURNING dashboard_id, title, description, data, keywords, created_at, created_by`
+);
+
+const updateDashboardImage = database.prepare(`
+    UPDATE dashboards SET image = ? WHERE dashboard_id = ?
+    RETURNING dashboard_id, title, description, data, keywords, created_at, created_by`
 );
 
 const deleteDashboard = database.prepare(`
@@ -28,5 +33,6 @@ export {
     getDashboardById,
     getDashboards,
     updateDashboard,
+    updateDashboardImage,
     deleteDashboard
 };

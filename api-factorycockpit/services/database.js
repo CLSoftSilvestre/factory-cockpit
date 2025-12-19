@@ -15,7 +15,10 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS dashboards (
     dashboard_id TEXT PRIMARY KEY,
     title TEXT NOT NULL,
+    description TEXT,
     data TEXT NOT NULL,
+    image BLOB,
+    keywords TEXT,
     created_at INTEGER NOT NULL,
     created_by TEXT NOT NULL
 );
